@@ -1,0 +1,8 @@
+
+34
+/home/stephan/projects/crazy-node-movement/lua/module-template/internal.lua
+1617313425
+local A,B,C,D,E="561","212","function","bufnr","comment";return {{{A,1,1,1,1,"main_chunk"},{A,3,1,30,1,C,"M.attach"},{B,3,19,23,D},{B,3,26,29,"lang"},{A,7,1,24,1,C,"M.detach"},{B,7,19,23,D}},{},{12,0,30,72,3,0,24,74,3,0,8,0},{[4]=E,[8]=E}}
+/home/stephan/projects/crazy-node-movement/lua/module-template.lua
+1617313425
+local A,B,C,D,E="561","113","require","function","comment";return {{{A,1,1,1,1,"main_chunk"},{B,1,17,23,C},{A,6,1,17,1,D,"M.init"},{B,7,3,9,C},{A,10,22,35,1,D}},{},{47,0,12,0,88,17,44,23,47,35,82,62,9,5,3,3,0,8,0},{[5]=E,[11]=E}}
