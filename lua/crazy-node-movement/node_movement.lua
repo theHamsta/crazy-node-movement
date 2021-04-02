@@ -11,7 +11,7 @@ local hl_namespace = api.nvim_create_namespace('crazy-node-movement')
 
 M.current_node = {}
 local swappable_textobjects = {}
-local favorite_childs = caching.create_buffer_cache()
+local favorite_child = caching.create_buffer_cache()
 
 function M.clear_highlights(buf)
   api.nvim_buf_clear_namespace(buf, hl_namespace, 0, -1)
@@ -45,11 +45,11 @@ function M.do_node_movement(kind, swap)
     if kind == 'up' then
       destination_node = current_node:parent()
       if destination_node then
-        favorite_childs.set(destination_node:id(), buf, current_node)
+        favorite_child.set(destination_node:id(), buf, current_node)
       end
     elseif kind == 'down' then
       if current_node:named_child_count() > 0 then
-        destination_node = favorite_childs.get(current_node:id(), buf) or current_node:named_child(0)
+        destination_node = favorite_child.get(current_node:id(), buf) or current_node:named_child(0)
       else
         local next_node = ts_utils.get_next_node(current_node)
         if next_node and next_node:named_child_count() > 0 then
@@ -100,19 +100,14 @@ M.swap_left = function() M.do_node_movement('left', true) end
 M.swap_right = function() M.do_node_movement('right', true) end
 
 M.select_current_node = function()
-  local buf, line, col = unpack(vim.fn.getpos("."))
+  local buf = vim.api.nvim_get_current_buf()
   local current_node = M.current_node[buf]
+  if not current_node_ok(buf) then
+    current_node = ts_utils.get_node_at_cursor()
+  end
   if current_node then
-    local node_line, node_col = current_node:start()
-    if line-1 ~= node_line or  col-1 ~= node_col then
-      current_node = nil
-    end
+    ts_utils.update_selection(buf, current_node)
   end
-  if not current_node then
-    local root = parsers.get_parser():parse():root()
-    current_node = root:named_descendant_for_range(line-1, col-1, line-1, col)
-  end
-  ts_utils.node_range_to_vim(current_node)
 end
 
 function M.attach(bufnr)
