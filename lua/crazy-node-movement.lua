@@ -14,8 +14,6 @@ function M.init()
         move_down = "<a-j>",
         move_left = "<a-h>",
         move_right = "<a-l>",
-        swap_up = "<s-a-k>",
-        swap_down = "<s-a-j>",
         swap_left = "<s-a-h>",
         swap_right = "<s-a-l>",
         select_current_node = "<leader>ff"
