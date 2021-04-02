@@ -49,14 +49,38 @@ function M.do_node_movement(kind, swap)
       destination_node = current_node:parent()
       if destination_node then
         favorite_child.set(destination_node:id(), buf, current_node)
+      else
+        local smallest_node, min_length
+        parsers.get_parser():for_each_tree(function(tree)
+          local node = tree:root():named_descendant_for_range(current_node:range())
+          local length = ts_utils.node_length(node)
+          if node and node:parent() and (not min_length or min_length > length) then
+            smallest_node = node
+            min_length = length
+          end
+        end)
+        destination_node = smallest_node and smallest_node:parent()
       end
     elseif kind == 'down' then
       if current_node:named_child_count() > 0 then
         destination_node = favorite_child.get(current_node:id(), buf) or current_node:named_child(0)
       else
-        local next_node = ts_utils.get_next_node(current_node)
-        if next_node and next_node:named_child_count() > 0 then
-          destination_node = next_node:named_child(0)
+        parsers.get_parser():for_each_tree(function(tree, _)
+          if not destination_node then
+            local range = {tree:root():range()}
+            if ts_utils.is_in_node_range(current_node, range[1], range[2])
+              and tree:root():named_child_count() > 0
+            then
+                destination_node = tree:root()
+                destination_node = favorite_child.get(destination_node:id(), buf) or destination_node:named_child(0)
+            end
+          end
+        end)
+        if not destination_node then
+          local next_node = ts_utils.get_next_node(current_node)
+          if next_node and next_node:named_child_count() > 0 then
+            destination_node = next_node:named_child(0)
+          end
         end
       end
     elseif kind == 'left' then
