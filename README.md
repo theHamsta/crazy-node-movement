@@ -38,5 +38,5 @@ require "nvim-treesitter.configs".setup {
 
 ## Disclaimer
 
-Please don't expect too much from this. This is just an experiment.
+Please don't expect too much from this. This is just an experiment. Will fix swapping speed in nvim-treesitter-textobjects soon.
 
