@@ -2,7 +2,7 @@
 
 # crazy-node-movement
 
-Move along the parsered tree-sitter syntax tree. Not sure if that is a good idea 😄
+Move along the parsered tree-sitter syntax tree. Not sure if that is a good idea 😄.
 
 ![crazy-movement](https://user-images.githubusercontent.com/7189118/113417624-14fe1100-93c4-11eb-86bf-9d7db62f329b.gif)
 
