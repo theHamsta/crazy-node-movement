@@ -11,6 +11,7 @@ local hl_namespace = api.nvim_create_namespace('crazy-node-movement')
 
 M.current_node = {}
 local swappable_textobjects = {}
+local tick = {}
 local favorite_child = caching.create_buffer_cache()
 
 function M.clear_highlights(buf)
@@ -18,6 +19,8 @@ function M.clear_highlights(buf)
 end
 
 local function current_node_ok(buf)
+  local new_tick = api.nvim_buf_get_changedtick(buf)
+  if not tick[buf] or new_tick > tick[buf] then return false end
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   line = line - 1
   local pos = M.current_node[buf] and {M.current_node[buf]:start()}
@@ -62,6 +65,7 @@ function M.do_node_movement(kind, swap)
       destination_node = ts_utils.get_next_node(current_node, true, true)
     end
     M.current_node[buf] = destination_node or current_node
+    tick[buf] = api.nvim_buf_get_changedtick(buf)
   end
 
   if destination_node then
@@ -118,6 +122,10 @@ function M.attach(bufnr)
   for funcname, mapping in pairs(config.keymaps) do
     api.nvim_buf_set_keymap(buf, 'n', mapping,
       string.format(":lua require'crazy-node-movement.node_movement'.%s()<CR>", funcname), { silent = true })
+    if funcname == 'select_current_node' then
+      api.nvim_buf_set_keymap(buf, 'o', mapping,
+        string.format(":lua require'crazy-node-movement.node_movement'.%s()<CR>", funcname), { silent = true })
+    end
   end
   cmd(string.format('augroup CrazyNodeMovementCurrent_%d', bufnr))
   cmd 'au!'
