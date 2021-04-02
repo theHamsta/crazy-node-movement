@@ -16,7 +16,7 @@ function M.init()
         move_right = "<a-l>",
         swap_left = "<s-a-h>",
         swap_right = "<s-a-l>",
-        select_current_node = "<leader>ff"
+        select_current_node = "<leader><cr>"
       },
       swappable_textobjects = {'@function.outer', '@parameter.inner', '@statement.outer'},
     }
