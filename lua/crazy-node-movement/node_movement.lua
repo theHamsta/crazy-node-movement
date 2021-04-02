@@ -84,6 +84,7 @@ function M.do_node_movement(kind, swap)
           local _, _, textobject = shared.textobject_at_point(object_type)
           destination_node = textobject
           M.current_node[buf] = textobject
+          tick[buf] = api.nvim_buf_get_changedtick(buf)
           break
         end
       end
