@@ -13,6 +13,8 @@ M.current_node = {}
 local swappable_textobjects = {}
 local tick = {}
 local favorite_child = caching.create_buffer_cache()
+local allow_switch_parents = true
+local allow_next_parent = true
 
 function M.clear_highlights(buf)
   api.nvim_buf_clear_namespace(buf, hl_namespace, 0, -1)
@@ -84,9 +86,9 @@ function M.do_node_movement(kind, swap)
         end
       end
     elseif kind == 'left' then
-      destination_node = ts_utils.get_previous_node(current_node, true, true)
+      destination_node = ts_utils.get_previous_node(current_node, allow_switch_parents, allow_next_parent)
     elseif kind == 'right' then
-      destination_node = ts_utils.get_next_node(current_node, true, true)
+      destination_node = ts_utils.get_next_node(current_node, allow_switch_parents, allow_next_parent)
     end
     M.current_node[buf] = destination_node or current_node
     tick[buf] = api.nvim_buf_get_changedtick(buf)
@@ -144,6 +146,8 @@ function M.attach(bufnr)
 
   local config = require'nvim-treesitter.configs'.get_module('node_movement')
   swappable_textobjects = config.swappable_textobjects
+  allow_switch_parents = config.allow_switch_parents
+  allow_next_parent = config.allow_next_parent
   for funcname, mapping in pairs(config.keymaps) do
     api.nvim_buf_set_keymap(buf, 'n', mapping,
       string.format(":lua require'crazy-node-movement.node_movement'.%s()<CR>", funcname), { silent = true })

@@ -19,6 +19,8 @@ function M.init()
         select_current_node = "<leader><cr>"
       },
       swappable_textobjects = {'@function.outer', '@parameter.inner', '@statement.outer'},
+      allow_switch_parents = true,
+      allow_next_parent = true,
     }
   }
 end
