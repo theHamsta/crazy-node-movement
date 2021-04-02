@@ -5,7 +5,7 @@ local M = {}
 function M.init()
   require "nvim-treesitter".define_modules {
     node_movement = {
-      module_path = "crazy-node-movement.internal",
+      module_path = "crazy-node-movement.node_movement",
       is_supported = function(lang)
         return parsers.has_parser(lang)
       end,
@@ -19,7 +19,8 @@ function M.init()
         swap_left = "<s-a-h>",
         swap_right = "<s-a-l>",
         select_current_node = "<leader>ff"
-      }
+      },
+      swappable_textobjects = {'@function.outer', '@parameter.inner', '@statement.outer'},
     }
   }
 end
