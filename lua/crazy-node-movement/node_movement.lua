@@ -47,7 +47,7 @@ function M.do_node_movement(kind, swap)
   end
   local destination_node
 
-  if parsers.has_parser() then
+  if parsers.has_parser() and current_node then
     if kind == "up" then
       destination_node = current_node:parent()
       if destination_node then
