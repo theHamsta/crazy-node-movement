@@ -94,8 +94,8 @@ function M.do_node_movement(kind, swap)
     if swap then
       if kind == "up" then
         local destination_range = ts_utils.node_to_lsp_range(destination_node)
-        local replacement = ts_utils.get_node_text(current_node)
-        vim.lsp.util.apply_text_edits({ { range = destination_range, newText = table.concat(replacement, "\n") } }, buf)
+        local replacement = vim.treesitter.query.get_node_text(current_node, buf)
+        vim.lsp.util.apply_text_edits({ { range = destination_range, newText = replacement } }, buf, "utf8")
         parsers.get_parser():parse()
         api.nvim_win_set_cursor(api.nvim_get_current_win(), {
           destination_range.start.line + 1,
