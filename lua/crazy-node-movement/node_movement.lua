@@ -68,7 +68,10 @@ function M.do_node_movement(kind, swap)
         parsers.get_parser():for_each_tree(function(tree, _)
           if not destination_node then
             local range = { tree:root():range() }
-            if vim.treesitter.is_in_node_range(current_node, range[1], range[2]) and tree:root():named_child_count() > 0 then
+            if
+              vim.treesitter.is_in_node_range(current_node, range[1], range[2])
+              and tree:root():named_child_count() > 0
+            then
               destination_node = tree:root()
               destination_node = favorite_child.get(destination_node:id(), buf) or destination_node:named_child(0)
             end
