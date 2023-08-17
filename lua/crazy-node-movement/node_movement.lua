@@ -68,7 +68,7 @@ function M.do_node_movement(kind, swap)
         parsers.get_parser():for_each_tree(function(tree, _)
           if not destination_node then
             local range = { tree:root():range() }
-            if ts_utils.is_in_node_range(current_node, range[1], range[2]) and tree:root():named_child_count() > 0 then
+            if vim.treesitter.is_in_node_range(current_node, range[1], range[2]) and tree:root():named_child_count() > 0 then
               destination_node = tree:root()
               destination_node = favorite_child.get(destination_node:id(), buf) or destination_node:named_child(0)
             end
@@ -94,7 +94,7 @@ function M.do_node_movement(kind, swap)
     if swap then
       if kind == "up" then
         local destination_range = ts_utils.node_to_lsp_range(destination_node)
-        local replacement = vim.treesitter.query.get_node_text(current_node, buf)
+        local replacement = vim.treesitter.get_node_text(current_node, buf)
         vim.lsp.util.apply_text_edits({ { range = destination_range, newText = replacement } }, buf, "utf8")
         parsers.get_parser():parse()
         api.nvim_win_set_cursor(api.nvim_get_current_win(), {
