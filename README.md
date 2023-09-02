@@ -20,6 +20,7 @@ The configuration is like any other nvim-treesitter module.
 ```lua
 require "nvim-treesitter.configs".setup {
   node_movement = {
+    enable = true,
     keymaps = {
       move_up = "<a-k>",
       move_down = "<a-j>",
